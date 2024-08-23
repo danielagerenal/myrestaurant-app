@@ -7,9 +7,9 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
 
 
     @Override
@@ -31,18 +31,19 @@ public class MainActivity extends AppCompatActivity {
         startActivity(x);
 
     }
-    public void abrirReserva(View v){
-
+    public void abrirReserva (View v) {
         String numero = "+573015440140";
-        String url = "https://api.whatsapp.com/send?phone="+numero;
-        String whatsapp = "com.whatsapp";
+        String mensaje = "Hola, estoy interesado en hacer una reserva."; // Mensaje que quieres enviar
+        String url = "https://api.whatsapp.com/send?phone=" + numero + "&text=" + Uri.encode(mensaje);
         PackageManager pm = getPackageManager();
+
         Intent i = new Intent(Intent.ACTION_VIEW);
         i.setData(Uri.parse(url));
-        i.setPackage(whatsapp);
 
-        // agregar codigo para que no se abra la aplicacion sino un numero
-        startActivity(i);
-
+        if (i.resolveActivity(pm) != null) {
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "WhatsApp no está instalado", Toast.LENGTH_SHORT).show();
+        }
     }
 }
